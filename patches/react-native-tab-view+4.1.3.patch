@@ -1,0 +1,36 @@
+diff --git a/node_modules/react-native-tab-view/lib/module/TabBar.js b/node_modules/react-native-tab-view/lib/module/TabBar.js
+index 743bd31..5e9660a 100644
+--- a/node_modules/react-native-tab-view/lib/module/TabBar.js
++++ b/node_modules/react-native-tab-view/lib/module/TabBar.js
+@@ -168,6 +168,8 @@ const getTestIdDefault = ({
+ // How many items measurements should we update per batch.
+ // Defaults to 10, since that's whats FlatList is using in initialNumToRender.
+ const MEASURE_PER_BATCH = 10;
++
++const noop = () => {};
+ export function TabBar({
+   renderIndicator = renderIndicatorDefault,
+   gap = 0,
+@@ -231,6 +233,14 @@ export function TabBar({
+       return;
+     }
+     if (scrollEnabled) {
++      if (Platform.OS === 'android' && I18nManager.isRTL) {
++        flatListRef.current?.scrollToIndex({
++          index: navigationState.index,
++          viewPosition: 0.5,
++          animated: true,
++        });
++        return;
++      }
+       flatListRef.current?.scrollToOffset({
+         offset: scrollOffset,
+         animated: true
+@@ -424,6 +434,7 @@ export function TabBar({
+         scrollEventThrottle: 16,
+         renderItem: renderItem,
+         onScroll: handleScroll,
++        onScrollToIndexFailed: noop,
+         ref: flatListRef,
+         testID: testID
+       })
