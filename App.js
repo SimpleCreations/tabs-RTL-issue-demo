@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Button, I18nManager, View, useWindowDimensions } from "react-native";
+import { I18nManager, View, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import RNRestart from "react-native-restart";
 
 const Route1 = () => <View style={{ flex: 1, backgroundColor: "#ff4081" }} />;
 const Route2 = () => <View style={{ flex: 1, backgroundColor: "#673ab7" }} />;
@@ -31,6 +30,9 @@ const routes = [
   { key: "route7", title: "Route7" },
 ];
 
+I18nManager.allowRTL(true);
+I18nManager.forceRTL(true);
+
 export default function TabViewExample() {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
@@ -44,21 +46,6 @@ export default function TabViewExample() {
         renderScene={renderScene}
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
-      />
-      <Button
-        onPress={() => {
-          try {
-            I18nManager.allowRTL(true);
-            I18nManager.forceRTL(true);
-            setTimeout(() => {
-              console.log('AAA')
-              RNRestart.restart();
-            }, 500);
-          } catch (error) {
-            console.log("ERROR: ", error);
-          }
-        }}
-        title="change language to Arabic (RTL)"
       />
     </View>
   );
